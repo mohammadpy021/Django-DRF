@@ -1,3 +1,12 @@
 from django.shortcuts import render
+from django.views import generic
+from blog.models import Articles
+from django.contrib.auth.mixins import LoginRequiredMixin
 
-# Create your views here.
+
+class ArticleListView(generic.ListView):
+    model = Articles
+
+class ArticleDetailView(LoginRequiredMixin, generic.DetailView):
+    model = Articles
+    
