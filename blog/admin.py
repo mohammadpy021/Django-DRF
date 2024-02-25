@@ -8,7 +8,7 @@ from .models import Articles, Category
 @admin.register(Articles)
 class ArticlesAdmin(admin.ModelAdmin):
     prepopulated_fields = {"slug": ["title"],}
-    list_display = ("title", "status","get_categories" )
+    list_display = ("title", "status", "slug", "get_categories" )
     
     def get_categories(self, obj):
         return ([str(i) for i in obj.categories.all()])
@@ -16,4 +16,4 @@ class ArticlesAdmin(admin.ModelAdmin):
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
     prepopulated_fields = {"slug": ["title"],}
-    list_display = ("title", "status")
+    list_display = ("title","slug", "status")

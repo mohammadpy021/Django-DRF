@@ -14,5 +14,7 @@ class AuthorOrReadOnly(permissions.BasePermission):
             return True
         
         return bool (obj.author == request.user or  request.user.is_superuser)
+
+
             
 
