@@ -1,15 +1,6 @@
 from django.shortcuts import get_object_or_404
 from rest_framework import generics, status, views
 from rest_framework.response import Response
-from accounts.api.v1.serializers.accounts import EmailVerificationResendSerializer
-
-from accounts.api.v1.utils import EmailThread
-from .serializers import (ChangePasswordSerializer, CustomAuthTokenSerializer,
-                           RegistrationSerializer,
-                           UesrSerializer,
-                        #   CustomJWTTokenObtainPairSerializer,
-                          CustomTokenObtainPairSerializer
-                          )
 # from accounts.models import User
 from django.contrib.auth import get_user_model
 from rest_framework.authtoken.views import ObtainAuthToken
@@ -22,6 +13,15 @@ from mail_templated import send_mail
 import jwt
 from jwt.exceptions import  ExpiredSignatureError, InvalidTokenError
 from django.conf import settings
+from accounts.api.v1.serializers.accounts import EmailVerificationResendSerializer
+from accounts.api.v1.utils import EmailThread
+from .serializers import (ChangePasswordSerializer, CustomAuthTokenSerializer,
+                           RegistrationSerializer,
+                           UesrSerializer,
+                        #   CustomJWTTokenObtainPairSerializer,
+                          CustomTokenObtainPairSerializer
+                          )
+from .tasks import email_send
 
 class UserListView(generics.ListAPIView):
     permission_classes = [IsAdminUser]
@@ -149,17 +149,19 @@ class EmailVerificationView(views.APIView):
         return Response("your account has been verified successfully", status=status.HTTP_200_OK)
 
 class EmailVerificationResendView(generics.GenericAPIView):
+
     serializer_class = EmailVerificationResendSerializer
     def post(self, request, *args, **kwargs):
         serializer = self.get_serializer(data = request.data)
         serializer.is_valid(raise_exception=True)
         user_obj = serializer.validated_data["user"]
         self.email = serializer.validated_data["email"]
-        if user_obj.is_verified:
+        if user_obj.is_verified:# "is_verified" is a custom validation defiend in custom user model
             return Response({"detail": "Your account is already verified"}, status = status.HTTP_400_BAD_REQUEST)
         token  = self.get_tokens_for_user(user_obj)
-        mail = EmailMessage("Subject here", f"{token}", "from@gmail.com",[self.email])        
-        EmailThread(mail).start()
+        mail = EmailMessage("Subject here", f"{token}", "from@gmail.com",[self.email])
+        email_send.delay(mail)
+        # EmailThread(mail).start()
         return Response({"detail": "email has been sent"}, status = status.HTTP_200_OK)
 
     def get_tokens_for_user(self, user):
