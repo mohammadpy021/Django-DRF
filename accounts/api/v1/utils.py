@@ -1,4 +1,4 @@
-from django.core.mail import EmailMessage
+# from django.core.mail import EmailMessage
 import threading
 
 
@@ -12,5 +12,3 @@ class EmailThread(threading.Thread):
 
     def run (self):
         self.mail_object.send(fail_silently=False)
-
-
