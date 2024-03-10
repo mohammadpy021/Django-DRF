@@ -9,7 +9,7 @@ from rest_framework.permissions import  IsAuthenticated, IsAdminUser
 from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework_simplejwt.tokens import RefreshToken
 from django.core.mail import send_mail, EmailMessage
-from mail_templated import send_mail
+# from mail_templated import send_mail
 import jwt
 from jwt.exceptions import  ExpiredSignatureError, InvalidTokenError
 from django.conf import settings
@@ -158,10 +158,12 @@ class EmailVerificationResendView(generics.GenericAPIView):
         self.email = serializer.validated_data["email"]
         if user_obj.is_verified:# "is_verified" is a custom validation defiend in custom user model
             return Response({"detail": "Your account is already verified"}, status = status.HTTP_400_BAD_REQUEST)
-        token = self.get_tokens_for_user(user_obj)
-        mail  = EmailMessage("Subject here", f"{token}", "from@gmail.com",[self.email])
-        # email_send.delay(mail)
-        EmailThread(mail).start()
+        
+        token  = self.get_tokens_for_user(user_obj)
+        email_send.delay("Subject here", f"{token}", [self.email])#Celery
+        
+        # mail = EmailMessage("Subject here", f"{token}", "from@gmail.com",[self.email])
+        # EmailThread(mail).start() #thread
         return Response({"detail": "email has been sent"}, status = status.HTTP_200_OK)
 
     def get_tokens_for_user(self, user):

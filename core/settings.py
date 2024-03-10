@@ -46,7 +46,7 @@ INSTALLED_APPS = [
     'django_filters',
     'drf_yasg',                 #swagger
     'rest_framework_simplejwt', #JWT
-    'mail_templated',
+    # 'mail_templated',
 ]
 
 MIDDLEWARE = [
@@ -147,12 +147,12 @@ REST_FRAMEWORK = {
 #   "TOKEN_OBTAIN_SERIALIZER": "accounts.api.v1.serializers.CustomTokenObtainPairSerializer",
 #   # ...
 # }
-EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
-EMAIL_USE_TLS = False
-EMAIL_HOST = 'localhost' 
-EMAIL_PORT = 25
-EMAIL_HOST_USER = ''
-EMAIL_HOST_PASSWORD = ''
+EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+# EMAIL_USE_TLS = False
+# EMAIL_HOST = 'localhost' 
+# EMAIL_PORT = 25
+# EMAIL_HOST_USER = ''
+# EMAIL_HOST_PASSWORD = ''
 
 # Celery settings
-CELERY_BROKER_URL = 'redis://localhost:6379/0'
+CELERY_BROKER_URL = 'redis://127.0.0.1:6379/0'
