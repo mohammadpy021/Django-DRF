@@ -160,7 +160,7 @@ class EmailVerificationResendView(generics.GenericAPIView):
             return Response({"detail": "Your account is already verified"}, status = status.HTTP_400_BAD_REQUEST)
         
         token  = self.get_tokens_for_user(user_obj)
-        # email_send.delay("Subject here", f"{token}", [self.email])#Celery
+        # email_send.delay("Subject here", f"{token}", [self.email])#Celery 
         
         mail = EmailMessage("Subject here", f"{token}", "from@gmail.com",[self.email])
         EmailThread(mail).start() #thread
