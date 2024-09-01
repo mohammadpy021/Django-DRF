@@ -10,13 +10,13 @@ class ArticlesSerializer(serializers.ModelSerializer):
     absolute_url2 = serializers.HyperlinkedIdentityField(view_name='blog:api-v1:article-detail')#output is same as absolute_url
 
     # author = serializers.PrimaryKeyRelatedField(read_only=True)
-    # author = serializers.SlugRelatedField( #way1
+    # author = serializers.SlugRelatedField( #way1 for author
     #     many = False, 
     #     read_only=True,
     #     slug_field= 'username'
     #  )
 
-    # author = serializers.SerializerMethodField()#way2
+    # author = serializers.SerializerMethodField()#way2 for author
     # def get_author(self,obj):
     #     return str(obj.author.first_name or obj.author.username )
     
@@ -42,7 +42,7 @@ class ArticlesSerializer(serializers.ModelSerializer):
                                                                                 #(EX: we get request in "to_rep... in the CategoriesSerializer but it will failed. now we send it and it won't fail anymore")
                                                   
                                                   ).data
-        data['author'] = instance.author.first_name or instance.author.username #way3 best
+        data['author'] = instance.author.first_name or instance.author.username #way3 for author (best)
         # print(request.__dict__)
         
         ''' we can also use a diffrent serializer for detail-view instead'''
