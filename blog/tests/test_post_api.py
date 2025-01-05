@@ -41,6 +41,7 @@ class Test:
         api_cielnt.force_authenticate(user= common_user)
         response = api_cielnt.post(url, data=data)
         assert response.status_code == 201
+        assert response.data['author'] == common_user.email
 
     def test_create_article_invalid_data_response_400(self, api_cielnt, common_user):
         url = reverse('blog:api-v1:article-list')

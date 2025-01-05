@@ -6,8 +6,8 @@ from blog.api.v1.views import ArticlesViewSet, CategoryViewSet
 app_name = "api-v1"
 
 router = routers.SimpleRouter()
-router.register('articles', ArticlesViewSet , basename="article")
-router.register('category', CategoryViewSet , basename="category")
+router.register('articles', ArticlesViewSet, basename="article")
+router.register('category', CategoryViewSet, basename="category")
 
 
 # urlpatterns = router.urls

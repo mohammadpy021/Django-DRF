@@ -9,4 +9,3 @@ class ArticleListView(generic.ListView):
 
 class ArticleDetailView(LoginRequiredMixin, generic.DetailView):
     model = Articles
-    

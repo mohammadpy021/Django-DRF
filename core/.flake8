@@ -1,0 +1,17 @@
+[flake8]
+exclude =
+    .git,
+    __pycache__,
+    old,
+    build,
+    dist,
+    .env,
+    venv,
+    settings.py,
+    __init__.py,
+    tests
+
+
+extend-ignore =
+    ; line too long (* > 79 characters)
+    E501

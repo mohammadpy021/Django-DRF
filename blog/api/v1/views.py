@@ -62,7 +62,7 @@ class ArticlesViewSet(viewsets.ModelViewSet):
     pagination_class = DefaultPagination
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
     # filterset_fields = {'categories' :['exact'], 'status':['exact'], 'author' : ['exact']}
-    filterset_fields = {'categories__title' :['exact', 'in'], 'status':['exact'], 'author' : ['exact']}
+    filterset_fields = {'categories__title':['exact', 'in'], 'status':['exact'], 'author' : ['exact']}
     # filterset_class = ArticleFilter
     search_fields = ['title', 'description']
     ordering_fields = ['id', 'created_at']
@@ -111,5 +111,5 @@ class CategoryViewSet(viewsets.ModelViewSet):
     `update` and `destroy` actions.
     """
     queryset = models.Category.objects.all()
-    serializer_class   = CategoriesSerializer
+    serializer_class = CategoriesSerializer
     permission_classes = [IsAuthenticated]

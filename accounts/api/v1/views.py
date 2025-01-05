@@ -15,9 +15,10 @@ from jwt.exceptions import  ExpiredSignatureError, InvalidTokenError
 from django.conf import settings
 from accounts.api.v1.serializers.accounts import EmailVerificationResendSerializer
 from accounts.api.v1.utils import EmailThread
+from accounts.models import Profile
 from .serializers import (ChangePasswordSerializer, CustomAuthTokenSerializer,
                            RegistrationSerializer,
-                           UesrSerializer,
+                           ProfileSerializer,
                         #   CustomJWTTokenObtainPairSerializer,
                           CustomTokenObtainPairSerializer
                           )
@@ -25,22 +26,11 @@ from .serializers import (ChangePasswordSerializer, CustomAuthTokenSerializer,
 
 class UserListView(generics.ListAPIView):
     permission_classes = [IsAdminUser]
-    serializer_class = UesrSerializer
-    queryset = get_user_model().objects.all()
+    serializer_class = ProfileSerializer
+    queryset = Profile.objects.all()
 
-class CurrentUserDetailView(generics.RetrieveUpdateAPIView):
-    ''' details of current logged in user''' #(first way)
-    permission_classes = [IsAuthenticated]
-    serializer_class = UesrSerializer
-    http_method_names = ["get", "patch"] #remove put(update)
-
-    def get_object(self):
-        ''' important:
-             we put this here because we don't want to detemine the user pk in the url,
-             so we won't get Lookup Field Error anymore'''
-        return self.request.user
 # class CurrentUserDetailView(generics.GenericAPIView):
-#     ''' details of current logged in user(second way)'''
+#     ''' details of current logged in user'''
 #     permission_classes = [IsAuthenticated]
 #     def get(self, request, *args, **kwargs):    
 #         return Response({
@@ -50,6 +40,15 @@ class CurrentUserDetailView(generics.RetrieveUpdateAPIView):
 #             'full_name': request.user.first_name + " " + request.user.last_name
 #         })
 
+class ProfileAPIView(generics.RetrieveUpdateAPIView):
+    '''  profile details  of current user''' 
+    permission_classes = [IsAuthenticated]
+    serializer_class = ProfileSerializer
+    http_method_names = ["get", "patch"] # To remove put(update)
+    queryset = Profile.objects.all()
+    def get_object(self):
+        return get_object_or_404(self.queryset, user=self.request.user)
+    
 class RegistrationView(generics.GenericAPIView):
     serializer_class = RegistrationSerializer
     queryset = get_user_model().objects.all()
@@ -82,7 +81,8 @@ class CustomAuthToken(ObtainAuthToken):
             'token': token.key,
             'user_id': user.pk,
             'email': user.email,
-            'username': user.username or user.first_name + " " + user.last_name
+            # 'username': user.username or user.first_name + " " + user.last_name
+            'username': user.first_name + " " + user.last_name
         })
 
 class LogoutToken(views.APIView):
@@ -162,7 +162,7 @@ class EmailVerificationResendView(generics.GenericAPIView):
         token  = self.get_tokens_for_user(user_obj)
         # email_send.delay("Subject here", f"{token}", [self.email])#Celery 
         
-        mail = EmailMessage("Subject here", f"{token}", "from@gmail.com",[self.email])
+        mail = EmailMessage("This is subject", f"{token}", "from@gmail.com",[self.email])
         EmailThread(mail).start() #thread
         return Response({"detail": "email has been sent"}, status = status.HTTP_200_OK)
 
