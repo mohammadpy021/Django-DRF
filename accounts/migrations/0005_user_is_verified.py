@@ -6,13 +6,17 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('accounts', '0004_alter_profile_description'),
+        ("accounts", "0004_alter_profile_description"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='user',
-            name='is_verified',
-            field=models.BooleanField(default=False, help_text='user verification by email', verbose_name='verified'),
+            model_name="user",
+            name="is_verified",
+            field=models.BooleanField(
+                default=False,
+                help_text="user verification by email",
+                verbose_name="verified",
+            ),
         ),
     ]

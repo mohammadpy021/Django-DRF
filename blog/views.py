@@ -7,5 +7,6 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 class ArticleListView(generic.ListView):
     model = Articles
 
+
 class ArticleDetailView(LoginRequiredMixin, generic.DetailView):
     model = Articles

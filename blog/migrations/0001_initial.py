@@ -15,36 +15,78 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name='Category',
+            name="Category",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('title', models.CharField(max_length=255)),
-                ('slug', models.SlugField(default='', max_length=255, unique=True)),
-                ('status', models.BooleanField(default=False)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("title", models.CharField(max_length=255)),
+                ("slug", models.SlugField(default="", max_length=255, unique=True)),
+                ("status", models.BooleanField(default=False)),
             ],
             options={
-                'verbose_name': 'دسته\u200cبندی',
-                'verbose_name_plural': 'دسته\u200cبندی ها ',
+                "verbose_name": "دسته\u200cبندی",
+                "verbose_name_plural": "دسته\u200cبندی ها ",
             },
         ),
         migrations.CreateModel(
-            name='Articles',
+            name="Articles",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('title', models.CharField(max_length=255)),
-                ('image', models.ImageField(blank=True, null=True, upload_to='', verbose_name='Image')),
-                ('description', models.TextField(blank=True, null=True)),
-                ('slug', models.SlugField(default='', max_length=255, unique=True)),
-                ('created_at', models.DateTimeField(auto_now_add=True, verbose_name='تاریخ انتشار')),
-                ('updated_at', models.DateTimeField(auto_now=True)),
-                ('published_at', models.DateTimeField(null=True)),
-                ('status', models.BooleanField(default=False)),
-                ('author', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='articles', to=settings.AUTH_USER_MODEL, verbose_name='نویسنده')),
-                ('categories', models.ManyToManyField(blank=True, null=True, related_name='artilces', to='blog.category')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("title", models.CharField(max_length=255)),
+                (
+                    "image",
+                    models.ImageField(
+                        blank=True, null=True, upload_to="", verbose_name="Image"
+                    ),
+                ),
+                ("description", models.TextField(blank=True, null=True)),
+                ("slug", models.SlugField(default="", max_length=255, unique=True)),
+                (
+                    "created_at",
+                    models.DateTimeField(
+                        auto_now_add=True, verbose_name="تاریخ انتشار"
+                    ),
+                ),
+                ("updated_at", models.DateTimeField(auto_now=True)),
+                ("published_at", models.DateTimeField(null=True)),
+                ("status", models.BooleanField(default=False)),
+                (
+                    "author",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="articles",
+                        to=settings.AUTH_USER_MODEL,
+                        verbose_name="نویسنده",
+                    ),
+                ),
+                (
+                    "categories",
+                    models.ManyToManyField(
+                        blank=True,
+                        null=True,
+                        related_name="artilces",
+                        to="blog.category",
+                    ),
+                ),
             ],
             options={
-                'verbose_name': 'مقاله',
-                'verbose_name_plural': 'مقاله ها ',
+                "verbose_name": "مقاله",
+                "verbose_name_plural": "مقاله ها ",
             },
         ),
     ]

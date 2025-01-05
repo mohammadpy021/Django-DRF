@@ -3,8 +3,6 @@ from blog.models import Articles, Category
 import django_filters
 
 
-
-
 # class NumberInFilter(django_filters.BaseInFilter, django_filters.NumberFilter):
 #     pass
 
@@ -35,4 +33,3 @@ import django_filters
 #     def filter_category(self, queryset, name, value):
 #         category = value.split(',')
 #         return queryset.filter(categories__title__iexact=category)
-    

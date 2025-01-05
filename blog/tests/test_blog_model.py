@@ -1,9 +1,9 @@
-from django.test import TestCase
-from django.contrib.auth import get_user_model
-from blog.models import Articles
+# from django.test import TestCase
+# from django.contrib.auth import get_user_model
+# from blog.models import Articles
 
-# class ModelTestCase(TestCase) : 
-    
+# class ModelTestCase(TestCase) :
+
 #     def setUp(self):
 #         self.user = get_user_model().objects.create(email="adminTest@gmail.com", password="Moh@mm@d021")
 

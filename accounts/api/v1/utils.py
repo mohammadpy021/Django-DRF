@@ -10,5 +10,5 @@ class EmailThread(threading.Thread):
         self.mail_object = mail_object
         threading.Thread.__init__(self)
 
-    def run (self):
+    def run(self):
         self.mail_object.send(fail_silently=False)
