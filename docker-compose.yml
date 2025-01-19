@@ -1,6 +1,7 @@
 version: '3.9'
 
 services:
+
   backend:
     build: .
     container_name: backend
@@ -11,6 +12,8 @@ services:
       - 8000:8000
     env_file:
       - ./.env
+    depends_on:
+      - redis
 
   smtp4dev:
     image: docker.arvancloud.ir/rnwood/smtp4dev:v3
@@ -31,6 +34,59 @@ services:
 
       #Specifies the server hostname. Used in auto-generated TLS certificate if enabled.
       - ServerOptions__HostName=smtp4dev
+
+  redis:
+    container_name: redis
+    image: docker.arvancloud.ir/redis:latest
+    restart: always
+    ports:
+      - "6379:6379"
+    command: redis-server --save 20 1 --loglevel warning 
+
+  worker:
+    build: .
+    container_name: celery_worker
+    command: celery -A core worker --loglevel=info
+    depends_on:
+      - redis
+      - backend
+    volumes:
+      - .:/usr/src/app/
+    env_file:
+      - ./.env
+
+  celery_beat:
+    build: .
+    container_name: celery_beat
+    command: celery -A core beat --loglevel=info --scheduler django_celery_beat.schedulers:DatabaseScheduler
+    depends_on:
+      - redis
+      - backend
+    volumes:
+      - .:/usr/src/app/
+    env_file:
+      - ./.env
+
+  # master:
+  #   container_name: locust_master
+  #   image: docker.arvancloud.ir/locustio/locust
+  #   ports:
+  #    - "8089:8089"
+  #   volumes:
+  #     - ./locustfile:/mnt/locust
+  #   command:  -f /mnt/locust/locustfile.py --master -H http://backend:8000
+  #   depends_on:
+  #     - backend
+  
+  # locust_worker:
+  #   container_name: locust_worker
+  #   image:  docker.arvancloud.ir/locustio/locust
+  #   volumes:
+  #     - ./locustfile:/mnt/locust
+  #   command:  -f /mnt/locust/locustfile.py --worker --master-host master
+  #   depends_on:
+  #     - backend
+
 
 volumes:
   smtp4dev-data:

@@ -3,5 +3,8 @@ from django.core.mail import send_mail, EmailMessage
 
 
 @shared_task
-def email_send(subject, token, ToEmail):
-    send_mail(subject, f"{token}", "from@gmail.com", [ToEmail], fail_silently=False)
+def send_email_task(subject, token, to_email, from_email="from@gmail.com"):
+    send_mail(subject, f"{token}", from_email, [to_email], fail_silently=False)
+   
+
+

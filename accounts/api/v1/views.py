@@ -27,7 +27,7 @@ from .serializers import (
     CustomTokenObtainPairSerializer,
 )
 
-# from .tasks import email_send
+from .tasks import send_email_task
 
 
 class UserListView(generics.ListAPIView):
@@ -205,12 +205,12 @@ class EmailVerificationResendView(generics.GenericAPIView):
             )
 
         token = self.get_tokens_for_user(user_obj)
-        # email_send.delay("Subject here", f"{token}", [self.email])#Celery
+        send_email_task.delay("Subject here", f"{token}", to_email = self.email, from_email="from@gmail.com") # Celery
 
-        mail = EmailMessage(
-            "This is subject", f"{token}", "from@gmail.com", [self.email]
-        )
-        EmailThread(mail).start()  # thread
+        # mail = EmailMessage(
+        #     "This is subject", f"{token}", "from@gmail.com", [self.email]
+        # )
+        # EmailThread(mail).start()  # thread
         return Response({"detail": "email has been sent"}, status=status.HTTP_200_OK)
 
     def get_tokens_for_user(self, user):
