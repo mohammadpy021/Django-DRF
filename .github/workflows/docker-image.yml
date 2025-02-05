@@ -18,3 +18,24 @@ jobs:
       run: docker compose up -d
     - name: Run tests
       run: docker exec backend sh -c "pytest ."
+
+  # Deploy:
+  #   if: ${{ always() && contains(join(needs.*.result, ','), 'success') }}
+  #   name: Deploy
+  #   needs: build
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #   - uses: actions/checkout@v4
+  #   - name: connect and execute commands
+  #   - uses: appleboy/ssh-action@master
+  #     with:
+  #       username: ${{secret.USERNAME}}
+  #       password: ${{secret.PASSWORD}}
+  #       host: ${{secret.HOST}}
+  #       port: ${{secret.PORT}}
+  #       script: |
+  #         cd ${{secret.PROJECT_PATH}}
+  #         docker compose -f docker-compose-stage.yml stop
+  #         git pull
+  #         docker compose -f docker-compose-stage.yml up restart
+
