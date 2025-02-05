@@ -47,6 +47,8 @@ INSTALLED_APPS = [
     "django_filters",
     "drf_yasg",  # swagger
     "rest_framework_simplejwt",  # JWT
+    "django_celery_results",
+    'django_celery_beat',
     # 'mail_templated',
 ]
 
@@ -127,12 +129,12 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 STATIC_URL = "static/"
-STATIC_ROOT = BASE_DIR / "static"
-STATIC_URL = "media/"
-STATIC_ROOT = BASE_DIR / "media"
+STATIC_ROOT = BASE_DIR / "static" # this checked by collectstatic
+MEDIA_URL = "media/"
+MEDIA_ROOT = BASE_DIR / "media"
 
 STATICFILES_DIRS = [
-    BASE_DIR / "staticfiles",
+    BASE_DIR / "staticfiles", # for development
 ]
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
@@ -163,4 +165,17 @@ EMAIL_HOST_USER = ""
 EMAIL_HOST_PASSWORD = ""
 
 # Celery settings
-CELERY_BROKER_URL = "redis://127.0.0.1:6379/0"
+CELERY_BROKER_URL = "redis://redis:6379/0"
+# django_celery_results settings
+CELERY_RESULT_BACKEND = "redis://redis:6379/0"
+
+# cache config
+CACHES = {
+    'default': {
+        'BACKEND': 'django_redis.cache.RedisCache',
+        'LOCATION': 'redis://redis:6379/1',  # Use the appropriate Redis server URL
+        'OPTIONS': {
+            'CLIENT_CLASS': 'django_redis.client.DefaultClient',
+        }
+    }
+}

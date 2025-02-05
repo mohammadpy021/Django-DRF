@@ -50,15 +50,15 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
     """customizes of TokenObtainPairSerializer to add more fields"""
 
     def validate(self, attrs):
-        # username = attrs.get('username')
-        # password = attrs.get('password')
-        # user = authenticate(request=self.context.get('request'),username=username, password=password)
-        if not self.user.is_verfied:
+        email = attrs.get('email')
+        password = attrs.get('password')
+        user = authenticate(request=self.context.get('request'), email=email, password=password)
+        if not user.is_verified:
             raise serializers.ValidationError({"details": "user is not verified."})
         data = super().validate(attrs)
         data["id"] = str(
             self.user.id
-        )  # we have access to the user through the parent classes
+        ) 
         # data['username'] = str(self.user.username)
         data["email"] = str(self.user.email)
         return data
